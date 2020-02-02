@@ -1,9 +1,13 @@
 import { AvatarVoluntario } from './avatar-voluntario';
+import { Papel } from '../papeis/papel';
+
 export interface Voluntario {
-  idade: string;
+  email: string;
+  idade: number;
   sobrenome: any;
   nameToSearch: string;
-  uuid: string;
+  uid: string;
   nome: string;
   avatar: AvatarVoluntario;
+  papel?: Papel;
 }

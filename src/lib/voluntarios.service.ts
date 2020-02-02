@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Voluntario, AvatarVoluntario } from './voluntarios';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,17 +18,23 @@ export class VoluntariosService {
     return this.db.collection<AvatarVoluntario>('/avatars');
   }
 
-  getVoluntario(uuid) {
-    return this.getCollectionVoluntarios().doc<Voluntario>(uuid).snapshotChanges();
+  getVoluntario(uid) {
+    return this.getCollectionVoluntarios().doc<Voluntario>(uid).snapshotChanges();
   }
 
-  updateVoluntario(uuid: string, voluntario: Voluntario) {
+  updateVoluntario(uid: string, voluntario: Voluntario) {
     voluntario.nameToSearch = voluntario.nome.toLowerCase();
-    return this.getCollectionVoluntarios().doc<Voluntario>(uuid).set(voluntario);
+    return this.getCollectionVoluntarios().doc<Voluntario>(uid).set(voluntario);
   }
 
-  deleteVoluntario(uuid: string) {
-    return this.getCollectionVoluntarios().doc<Voluntario>(uuid).delete();
+  deleteVoluntario(uid: string) {
+      const subscription:Subscription = this.getCollectionVoluntarios()
+      .doc<Voluntario>(uid).valueChanges()
+      .subscribe((voluntario: Voluntario) => {
+        this.db.collection('/voluntarios_removidos').doc<Voluntario>(uid).set(voluntario);
+        subscription.unsubscribe();
+      });
+      return this.getCollectionVoluntarios().doc<Voluntario>(uid).delete();
   }
 
   getVoluntarios(): Observable<any> {
@@ -36,8 +42,8 @@ export class VoluntariosService {
   }
 
   private getCollectionVoluntarios(query = null) {
-    if(query)
-      return this.db.collection<Voluntario>('/voluntarios',query);
+    if (query)
+      return this.db.collection<Voluntario>('/voluntarios', query);
     else
       return this.db.collection<Voluntario>('/voluntarios');
   }
@@ -60,7 +66,7 @@ export class VoluntariosService {
         nome: voluntario.nome,
         nameToSearch: voluntario.nome.toLowerCase(),
         sobrenome: voluntario.sobrenome,
-        idade: parseInt(voluntario.idade, 10),
+        idade: voluntario.idade,
         avatar
       });
   }
