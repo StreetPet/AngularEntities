@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { EntitiesComponent } from './entities.component';
-
-
+export * from './voluntarios.service';
+export * from './papeis.service';
 
 @NgModule({
-  declarations: [EntitiesComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [EntitiesComponent]
+  exports: []
 })
 export class EntitiesModule { }
