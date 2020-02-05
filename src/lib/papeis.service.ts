@@ -1,19 +1,12 @@
 import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class PapeisService {
-
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Papel } from './papeis';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChange, DocumentChangeAction } from '@angular/fire/firestore';
+import { Papel } from './papeis/papel';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VoluntariosService {
+export class PapeisService {
 
   constructor(public db: AngularFirestore) { }
 
@@ -22,27 +15,27 @@ export class VoluntariosService {
   }
 
   updatePapel(uid: string, papel: Papel) {
-    return this.getCollectionVoluntarios().doc<Papel>(uid).set(papel);
+    return this.getCollectionPapeis().doc<Papel>(uid).set(papel);
   }
 
   deletePapel(uid: string) {
-    return this.getCollectionVoluntarios().doc<Papel>(uuid).delete();
+    return this.getCollectionPapeis().doc<Papel>(uid).delete();
   }
 
-  getPapeis(): Observable<any> {
+  getPapeis(): Observable<DocumentChangeAction<Papel>[]> {
     return this.getCollectionPapeis().snapshotChanges();
   }
 
-  private getCollectionPapeis(query = null) {
+  private getCollectionPapeis(query = null): AngularFirestoreCollection<Papel> {
     if(query)
       return this.db.collection<Papel>('/papeis',query);
     else
-      return this.db.collection<Voluntario>('/papeis');
+      return this.db.collection<Papel>('/papeis');
   }
 
   searchPapel(nome: string) {
-    return this.getCollectionVoluntarios(ref => ref.where('nome', '>=', searchValue)
-      .where('nome', '<=', searchValue + '\uf8ff'))
+    return this.getCollectionPapeis(ref => ref.where('nome', '>=', nome)
+      .where('nome', '<=', nome + '\uf8ff'))
       .snapshotChanges();
   }
 

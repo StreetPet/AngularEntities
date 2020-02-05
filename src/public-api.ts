@@ -3,5 +3,5 @@
  */
 
 export * from './lib/entities.module';
-export * from './lib/volunarios/'
+export * from './lib/voluntarios/'
 export * from './lib/papeis/papel';
