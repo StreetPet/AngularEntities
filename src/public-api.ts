@@ -3,5 +3,7 @@
  */
 
 export * from './lib/entities.module';
-export * from './lib/voluntarios/'
-export * from './lib/papeis/papel';
+export * from './lib/avatar';
+export * from './lib/voluntarios';
+export * from './lib/visitantes';
+export * from './lib/papeis';

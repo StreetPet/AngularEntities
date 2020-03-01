@@ -1,3 +1,2 @@
-
-export * from './voluntario';
+export * from './avatar';
 export * from './avatar-voluntario';
