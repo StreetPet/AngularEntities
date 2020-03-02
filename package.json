@@ -1,6 +1,24 @@
 {
-  "name": "entities",
-  "version": "0.0.1",
+  "name": "@streetpet/entities",
+  "version": "0.0.3",
+  "homepage": "https://streetpet.github.io/AngularEntities",
+  "author": {
+      "name": "Carlos Delfino",
+      "url": "https://github.com/streetpet/"
+  },
+  "publishConfig": {
+      "registry": "https://npm.pkg.github.com/"
+  },
+  "contributors": [
+      {
+          "name": "Carlos Delfino",
+          "url": "https://carlosdelfino.github.io"
+      }
+  ],
+  "repository": {
+      "type": "git",
+      "url": "git://github.com/streetpet/AngularEntities.git"
+  },
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14"
