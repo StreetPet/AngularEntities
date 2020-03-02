@@ -146,7 +146,7 @@ export class VoluntariosService {
     return this.getVoluntario(uid)
       .subscribe((value: Action<DocumentSnapshot<Voluntario>>) => {
         const voluntario = value.payload.data();
-        const papeisRef = (voluntario.papeis as any as DocumentReference[]);
+        const papeisRef = (voluntario.papeis as any as DocumentReference[]) || [];
 
         const papeis: Papeis = {};
         const promisesRef: Promise<void>[] = [];
