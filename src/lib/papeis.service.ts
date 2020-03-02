@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentSnapshot, Action, QueryFn, DocumentChange } from '@angular/fire/firestore';
+import { DocumentSnapshot, Action, QueryFn, DocumentChange } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DocumentChangeAction, DocumentReference } from '@angular/fire/firestore';
 import { Papel, Papeis } from './papeis/papel';
 import { Observable, Subscription } from 'rxjs';
-import { Voluntario } from './voluntarios';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +45,7 @@ export class PapeisService {
 
   /**
    * Adiciona uma função que observa mudanças e novos papeis no banco de dados
-   * 
+   *
    * @param observerFn
    */
   observePapeis(observerFn: (p: Papeis) => void): Subscription {

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, QueryFn, DocumentData, DocumentChange } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { QueryFn, DocumentData, DocumentChange } from '@angular/fire/firestore';
 import { DocumentChangeAction, DocumentSnapshot, Action } from '@angular/fire/firestore';
 import { DocumentReference } from '@angular/fire/firestore';
+import { Observable, Subscription } from 'rxjs';
 import { Voluntario, AvatarVoluntario } from './voluntarios';
-import { Observable, Subscription, Subscriber } from 'rxjs';
 import { Papel, Papeis } from './papeis';
-import { promise } from 'protractor';
 import { PapeisService } from './papeis.service';
 
 export interface SubscriptionArray {
@@ -116,8 +116,12 @@ export class VoluntariosService {
       });
   }
 
-  searchVoluntarioPelaIdade(idade: number, observeFn: (voluntarios: Voluntario[]) => void): Subscription {
-    const collection = this.getCollectionVoluntarios(ref => ref.orderBy('idade').startAt(idade));
+  searchVoluntarioPelaIdade(
+    idade: number,
+    observeFn: (voluntarios: Voluntario[]) => void): Subscription {
+
+    const collection = this.getCollectionVoluntarios(ref => ref.orderBy('idade')
+      .startAt(idade));
     return collection.snapshotChanges().subscribe((ref: DocumentChangeAction<Voluntario>[]) => {
       observeFn(ref.map<Voluntario>((v: DocumentChangeAction<Voluntario>) => {
         const voluntario: Voluntario = v.payload.doc.data();
@@ -127,7 +131,10 @@ export class VoluntariosService {
     });
   }
 
-  async createVoluntario(voluntario: Voluntario, avatar: AvatarVoluntario): Promise<DocumentReference> {
+  async createVoluntario(
+    voluntario: Voluntario,
+    avatar: AvatarVoluntario): Promise<DocumentReference> {
+
     return this.getCollectionVoluntarios()
       .add({
         nome: voluntario.nome,
@@ -138,7 +145,10 @@ export class VoluntariosService {
       } as unknown as Voluntario);
   }
 
-  observePapeis(uid: Voluntario | string, observeFn: (papeis: Papeis) => void): Subscription {
+  observePapeis(
+    uid: Voluntario | string,
+    observeFn: (papeis: Papeis) => void): Subscription {
+
     if (typeof uid !== 'string') {
       uid = uid.uid;
     }
@@ -159,7 +169,7 @@ export class VoluntariosService {
               if (papel) {
                 papel.uid = doc.id;
                 papeis[doc.id] = papel;
-              };
+              }
             }));
         });
         Promise.all(promisesRef)
@@ -268,5 +278,4 @@ export class VoluntariosService {
       }
     });
   }
-
 }

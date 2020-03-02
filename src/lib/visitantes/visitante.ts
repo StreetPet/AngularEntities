@@ -6,7 +6,7 @@ import { User } from 'firebase';
  * Tais dados são os mesmos usados pelo Objeto User do Firebase, 
  * porém de forma a desacoplar do firebase tais informações.
  */
-export interface Visitante{
+export interface Visitante {
    uid: string;
    email: string;
    displayName: string;

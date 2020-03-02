@@ -1,4 +1,4 @@
-export interface Avatar{
+export interface Avatar {
    /**
     * Quando Avatar é criado deve ser definido o tipo,
     * que é diretamente ligado a quem usa o avatar,

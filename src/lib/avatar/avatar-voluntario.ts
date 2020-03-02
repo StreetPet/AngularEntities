@@ -1,9 +1,9 @@
 import { Avatar } from './avatar';
 
-export interface AvatarVoluntario extends Avatar{
+export interface AvatarVoluntario extends Avatar {
   /**
    * Deve obrigatóriamente ser 1 para Voluntáiro
    */
   readonly type: number;
-  
+
 }
