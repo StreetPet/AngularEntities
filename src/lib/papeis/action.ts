@@ -1,8 +1,4 @@
-import { Papeis } from './papel';
-
-export interface Actions {
-   [index: string]: Action;
-}
+import { Papel } from '.';
 
 export interface Action {
    uid: string;
@@ -38,5 +34,5 @@ export interface Action {
     * 
     * Haverá uma função responsável por manter esta proriedade.
     */
-   papeis?: Papeis | string[] | any[];
+   papeis?: Papel[] | string[] | any[];
 }

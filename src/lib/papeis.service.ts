@@ -1,9 +1,12 @@
-import { Injectable } from '@angular/core';
-import { DocumentSnapshot, Action, QueryFn, DocumentChange } from '@angular/fire/firestore';
+import { Injectable, CollectionChangeRecord } from '@angular/core';
+import { DocumentSnapshot, Action, QueryFn, DocumentChange, CollectionReference } from '@angular/fire/firestore';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DocumentChangeAction, DocumentReference } from '@angular/fire/firestore';
-import { Papel, Papeis } from './papeis/papel';
+import { Papel } from './papeis/papel';
 import { Observable, Subscription } from 'rxjs';
+
+export type PapeisObserverFunction = (p: Papel[]) => void;
+export type PapelObserverFunction = (p: Papel) => void;
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +27,25 @@ export class PapeisService {
     return this.getCollectionPapeis().doc<Papel>(uid).delete();
   }
 
+  /**
+   * Observa se existe e se foi adicionado novos papeis que são 
+   * obrigatórios para todo voluntário. 
+   * 
+   * @param observerFn
+   */
+  observeInitialRoles(observerFn: PapeisObserverFunction): Subscription {
+    return this.getCollectionPapeis((ref: CollectionReference) => {
+      return ref.where('initial', '==', true);
+    }).snapshotChanges(['added'])
+      .subscribe((docAction: DocumentChangeAction<Papel>[]) => {
+        const papeis: Papel[] = [];
+        docAction.forEach((action: DocumentChangeAction<Papel>) => {
+          papeis.push(action.payload.doc.data());
+        });
+        observerFn(papeis);
+      });
+  }
+
   private getCollectionPapeis(query?: QueryFn): AngularFirestoreCollection<Papel> {
     if (query) {
       return this.db.collection<Papel>('/papeis', query);
@@ -38,7 +60,7 @@ export class PapeisService {
       .snapshotChanges();
   }
 
-  async createPapel(papel: Papel): Promise<DocumentReference> {
+  createPapel(papel: Papel): Promise<DocumentReference> {
     return this.getCollectionPapeis()
       .add(papel);
   }
@@ -48,10 +70,10 @@ export class PapeisService {
    *
    * @param observerFn
    */
-  observePapeis(observerFn: (p: Papeis) => void): Subscription {
+  observePapeis(observerFn: PapeisObserverFunction): Subscription {
     return this.getCollectionPapeis().snapshotChanges(['added', 'modified'])
       .subscribe((docsAction: DocumentChangeAction<Papel>[]) => {
-        const papeis: Papeis = {};
+        const papeis: Papel[] = [];
         docsAction.forEach(((docAction: DocumentChangeAction<Papel>) => {
           const papel: Papel = docAction.payload.doc.data();
           console.log(papel);
@@ -59,7 +81,7 @@ export class PapeisService {
             this.correctPapelUid(docAction.payload);
             return;
           }
-          papeis[papel.uid] = papel;
+          papeis.push(papel);
         }));
         observerFn(papeis);
       });
@@ -77,7 +99,7 @@ export class PapeisService {
    * 
    * @param observerFn
    */
-  observeRemovedPapeis(observerFn: (p: Papel[]) => void): Subscription {
+  observeRemovedPapeis(observerFn: PapeisObserverFunction): Subscription {
     return this.getCollectionPapeis().snapshotChanges(['removed'])
       .subscribe((dosAction: DocumentChangeAction<Papel>[]) => {
         observerFn(dosAction.map<Papel>(((v: DocumentChangeAction<Papel>) => {

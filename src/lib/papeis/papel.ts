@@ -1,11 +1,4 @@
-import { Actions } from './action';
-
-/**
- * Representa o Array que conterá os papeis, deve sempre ser seguido o seguinte formato.
- */
-export interface Papeis {
-   [index: string]: Papel;
-}
+import { Action } from './';
 
 export interface Papel {
    uid: string;
@@ -30,6 +23,6 @@ export interface Papel {
     * aos demais.
     * 
     */
-   actions?: Actions | string[] | any[];
+   actions?: Action[] | string[] | any[];
 
 }

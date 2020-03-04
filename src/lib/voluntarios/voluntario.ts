@@ -1,5 +1,5 @@
 import { AvatarVoluntario } from '../avatar/avatar-voluntario';
-import { Papeis } from '../papeis';
+import { Papel } from '../papeis';
 import { Visitante } from '../visitantes';
 
 /**
@@ -46,11 +46,11 @@ export interface Voluntario {
    * do firebase para uso local, quando será convertido para Papeis ou UID
    * do Papeis
    */
-  papeis?: Papeis | string[] | any[];
+  papeis?: Papel[] | string[] | any[];
   /**
    * Papeis solicitados para este voluntário que ainda não fora aprovados.
    */
-  papeisEmEspera?: Papeis | string[] | any[];
+  papeisEmEspera?: Papel[] | string[] | any[];
 }
 
 
